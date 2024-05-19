@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layout/head :: head"></div>
+<link rel="stylesheet" th:href="@{/bootstrap/css/style.css}"/>
+<body>
+<div th:replace="layout/nav :: nav"></div>
+<script>
+    function deleteBoard(boardNo) {
+        if(confirm('삭제하시겠습니까?')) {
+            location.href='/board/delete/'+boardNo;
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="container mt-5">
+    <h1 class="detail-header" th:text="${boardList.title}">Study Title</h1><br>
+    <div class="text-end mb-3" th:if="${boardList.writer != null and session.userNo == boardList.writer.userNo}" style="padding: 0;">
+        <a th:href="@{/board/update/{boardNo}(boardNo=${boardList.boardNo})}" class="btn btn-outline-dark" style="margin-right: 10px; border-radius: 30px">수정</a>
+        <button type="button" class="btn btn-outline-dark" th:onclick="deleteBoard(${boardList.boardNo})" style="border-radius: 30px" name="id">
+            삭제
+        </button>
+        </form>
+    </div>
+
+    <hr>
+    <br><br>
+    <div class="detail-info">
+        <input type="hidden" id="loginStatus" th:value="${session.userName != null ? 'logged-in' : 'not-logged-in'}" />
+        <div><dt>스터디 과목</dt>&nbsp;&nbsp;<dd th:text="${boardList.studySubject}">Subject</dd></div>
+        <div><dt>작성자</dt>&nbsp;&nbsp;<dd th:text="${boardList.writer.userName}">Subject</dd></div>
+        <div><dt>진행 방식</dt>&nbsp;&nbsp;<dd th:text="${boardList.studyType}">Type</dd></div>
+        <div><dt>모집 인원</dt>&nbsp;&nbsp;<dd th:text="${boardList.totalPeople}">0</dd></div>
+        <div><dt>마감 일자</dt>&nbsp;&nbsp;<dd th:text="${boardList.dueDate}">2023-01-01</dd></div>
+        <div><dt>연락 방법</dt>&nbsp;&nbsp;<dd><a th:href="${boardList.contactLink}" th:text="${boardList.contactLink}" class="detail-link">Open Chat</a></dd></div>
+    </div>
+    <br><br><br><br>
+    <div>
+        <div>
+            <h3 style="text-align: left; font-weight: bold;">스터디 소개</h3>
+            <hr>
+            <div id="contentBox" th:text="${boardList.content}">Content here</div>
+            <hr>
+        </div><br><br>
+        <!-- 댓글 섹션 시작 -->
+        <div class="comments-section">
+            <h3 style="text-align: left; font-weight: bold;">댓글</h3>
+
+            <!-- 댓글 입력 -->
+            <form id="commentForm" th:action="@{/board/detail/reply/{boardNo}(boardNo = ${boardList.boardNo})}" th:object="${replyRequest}" th:method="post">
+                <div class="mb-3">
+                    <div style="font-size: 3rem; margin-left: 0px;">🙋🏻</div>
+                    <textarea class="form-control" id="commentText" th:field="*{comment}" rows="3" placeholder="여기에 작성해주세요 ..."></textarea>
+                </div>
+                <div class="text-end">
+                    <button type="button" class="btn btn-outline-dark"  style="margin-right: 30px; border-radius: 30px" onclick="isSessionExistFormAction(submitCommentForm)">댓글 등록</button>
+                </div><br><br>
+            </form>
+
+            <!-- 제출된 댓글을 보여주는 영역 -->
+            <div class="submitted-comments mt-4">
+                <div th:each="reply : ${replyList}">
+                    <div class="comment">
+                        <p th:text="'🙋🏻 '+${reply.writer}" class="comment-author" style="font-weight: bold; font-size:22px;">작성자</p>
+
+                        <div class="comment-content-container">
+                            <div th:text="${reply.comment}" style="flex-grow: 1;">댓글 내용</div>
+
+                            <!-- 댓글 수정 -->
+                            <div class="text-end" th:if= "${session.userName != null and session.userName == reply.writer}">
+                                <button class="btn btn-outline-dark" data-bs-toggle="collapse" style="border-radius: 30px" th:data-bs-target="'#updateReplyForm' + ${reply.replyNo}" aria-expanded="false" aria-controls="updateReplyForm">수정</button>
+                            </div>
+
+                            <!-- 댓글 삭제 -->
+                            <div class="text-end" th:if= "${session.userName != null and session.userName == reply.writer}">
+                                <a class="btn btn-outline-dark" style="border-radius: 30px" th:href="@{/board/detail/{boardNo}/reply/remove/{replyNo}(boardNo = ${boardList.boardNo}, replyNo = ${reply.replyNo})}">삭제</a>
+                            </div>
+
+                        </div>
+
+                        <div class="collapse" th:id="'updateReplyForm' + ${reply.replyNo}">
+                            <form th:action="@{/board/detail/{boardNo}/reply/update/{replyNo}(boardNo = ${boardList.boardNo}, replyNo = ${reply.replyNo})}" th:object="${replyRequest}" th:method="post">
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="updateText" th:field="*{comment}" th:text="${reply.comment}" rows="3"></textarea>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-outline-dark"  style="margin-right: 30px; border-radius: 30px">수정하기</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <hr><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><br><br><br><br>
+<footer class="py-5 bg-dark">
+    <div class="container" style="margin-bottom: 0;"><p class="m-0 text-center text-white">Copyright &copy; Learning_Mate 2024</p></div>
+</footer>
+</body>
+</html>

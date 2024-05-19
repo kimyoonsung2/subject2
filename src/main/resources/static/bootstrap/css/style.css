@@ -1,0 +1,460 @@
+/* Flexbox 레이아웃을 이용한 폼 스타일링 */
+.form-row {
+    display: flex;
+    justify-content: space-between; /* 컨테이너 내 요소 사이에 공간을 균등하게 분배 */
+}
+
+.mb-3 {
+    flex: 1; /* flex 요소들이 컨테이너 내에서 가능한 공간을 균등하게 차지하도록 함 */
+    margin-right: 20px; /* 오른쪽 여백 추가 */
+    margin-bottom: 15px; /* 요소들 사이에 아래쪽 여백을 추가 */
+    padding: 10px; /* 내부 여백 추가 */
+}
+
+.mb-3:last-child {
+    margin-right: 0; /* 마지막 요소의 경우 오른쪽 여백 제거 */
+}
+
+/* 입력 필드와 텍스트 영역 스타일링 */
+.form-control {
+    border-radius: 10px; /* 입력 필드의 테두리 둥글기 정도 설정 */
+}
+
+/* 상세 페이지 제목 스타일링 */
+.detail-header {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+/* 상세 정보 표시를 위한 스타일링 */
+.detail-info {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 20px; /* 행 사이의 간격 조절 */
+}
+
+.detail-info > div {
+    flex-basis: calc(50% - 20px); /* 각 항목의 너비를 계산하여 간격 조절 */
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* 오른쪽 여백 추가 */
+}
+
+.detail-info > div:nth-child(2n) {
+    margin-right: 0; /* 짝수 번째 항목에 대한 오른쪽 여백 제거 */
+}
+
+/* 상세 정보 내 dt와 dd 스타일링 */
+.detail-info dt {
+    font-weight: bold;
+    color: grey; /* dt 태그를 굵은 회색 글씨로 설정 */
+    margin-right: 0.5rem; /* dt와 dd 사이 간격 조절 */
+}
+
+.detail-info dd {
+    font-weight: bold;
+    color: black; /* dd 태그를 굵은 검정 글씨로 설정 */
+    margin-left: 0; /* 기본 마진 제거 */
+    flex-grow: 1; /* 남은 공간을 dd가 차지하도록 설정 */
+}
+
+/* 링크 스타일링 */
+.detail-link {
+    color: blue; /* 링크를 파란색으로 설정 */
+}
+.detail-info dt, .detail-info dd {
+    font-weight: bold;
+    margin: 0; /* 기본 마진 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+    font-family: Arial, sans-serif; /* 일관된 글꼴 사용 */
+    font-size: 16px; /* 일관된 글꼴 크기 사용 */
+    line-height: 1.5; /* 일관된 라인 높이 사용 */
+}
+
+.content-box {
+    overflow-y: auto; /* 내용이 넘치면 세로 스크롤바 표시 */
+    max-height: 200px; /* 최대 높이 설정 */
+    width: calc(100% - 40px); /* hr 태그보다 약간 짧게 */
+    margin: auto; /* 중앙 정렬 */
+}
+#contentBox {
+    font-size: 18px; /* 텍스트 크기를 18px로 설정 */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrap {
+    flex: 1;
+}
+
+footer{
+    margin-bottom: 0px;
+}
+
+.card-body .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    height: 100%; /* 필요에 따라 조절 */
+}
+
+.card {
+    height: 100%; /* 카드 높이 고정 */
+}
+
+.comment-content-container {
+    display: flex; /* Flexbox 적용 */
+    justify-content: space-between; /* 내용과 버튼을 양 끝에 배치 */
+    align-items: center; /* 요소들을 세로 방향으로 중앙 정렬 */
+    width: 100%; /* 컨테이너의 너비를 부모 요소의 100%로 설정 */
+}
+
+.comment-content-container > .text-end {
+    flex-shrink: 0; /* 삭제 버튼 크기를 고정 */
+    margin-left: 20px; /* 내용과 버튼 사이의 간격 설정 */
+}
+
+
+.select-container select {
+    width: 130px;
+    padding-right: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    border-radius: 20px;
+    border: 2px solid black;
+    padding: 0.375rem 0.75rem;
+}
+
+.select-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.search-input {
+    float: right;
+    border-radius: 20px;
+    border: 2px solid black;
+    padding: 0.375rem 0.75rem;
+}
+
+body {
+    background-color: #FFF;
+    color: #000;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #4f5050;
+    color: #FFF;
+}
+
+.card, footer {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/*인기글 div*/
+body.dark-mode .card, body.dark-mode .navbar, body.dark-mode footer {
+    background-color: #424242;
+    color: white;
+}
+
+body.dark-mode .due-date,
+body.dark-mode .title,
+body.dark-mode .username,
+body.dark-mode .view-count {
+    color: #FFF !important;
+}
+
+/* 셀렉트바 */
+body.dark-mode .select-container select,
+body.dark-mode .search-input {
+    background-color: #4f5050;
+    color: #FFF;
+    border: 2px solid #FFF;
+}
+
+
+/* 다크 모드에서의 네비게이션 바 스타일 */
+body.dark-mode .navbar {
+    background-color: #4f5050 !important; /* 다크 모드에서의 배경색, !important로 우선순위 강제 */
+    color: #fff !important; /* 텍스트 색상을 흰색으로 */
+}
+
+/* 다크 모드에서 네비게이션 링크의 색상 설정 */
+body.dark-mode .navbar-light .navbar-nav .nav-link,
+body.dark-mode .navbar-light .navbar-nav a {
+    color: #fff !important; /* 모든 네비게이션 링크의 색상을 흰색으로 변경 */
+}
+
+/* 로고 색상 변경 */
+body.dark-mode .navbar a[href="/"] {
+    color: #fff !important; /* 다크 모드에서 로고 색상을 흰색으로 */
+}
+
+/* 버튼 스타일 */
+body.dark-mode .btn-outline-dark {
+    color: #fff; /* 흰색 텍스트 */
+    background-color: #333; /* 검정색 배경 */
+    border-color: #fff; /* 흰색 테두리 */
+}
+
+/* 버튼 마우스 오버 효과 */
+body.dark-mode .btn-outline-dark:hover {
+    background-color: #555; /* 마우스 오버시 회색 배경 */
+    border-color: #fff; /* 흰색 테두리 유지 */
+}
+
+/* 토글 스위치 기본 스타일 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* 스위치의 너비 */
+    height: 34px; /* 스위치의 높이 */
+}
+
+/* 실제 스위치가 될 input 체크박스는 화면에서 숨김 */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 슬라이더 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; /* 라이트 모드에서의 배경색 */
+    transition: .4s;
+    border-radius: 34px; /* 슬라이더의 둥근 모양을 위해 */
+}
+
+/* 슬라이더 내의 원형 토글 (슬라이더 내부에 그림자 효과를 주는 원) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px; /* 원의 높이 */
+    width: 26px; /* 원의 너비 */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3; /* 다크 모드 활성화 시 배경색 */
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px); /* 토글 활성화 시 원이 이동할 거리 */
+}
+
+/* 선택 가능한 요소 추가 스타일 (옵션) */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+/* 토글 아이콘 스타일 */
+.toggle-icon {
+    position: absolute;
+    display: none; /* 기본적으로 숨김 */
+    color: #f1c40f; /* 아이콘 색상 */
+}
+
+/* 토글 스위치 스타일 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* 토글 스위치 기본 스타일 */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 토글 스위치의 동그란 버튼 스타일 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px; /* 동그란 모양 */
+}
+
+/* 토글 스위치의 동그란 버튼 내부 스타일 (배경색) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%; /* 동그란 모양 */
+}
+
+/* 토글 스위치 활성화 시 동그란 버튼 색상 변경 */
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+/* 토글 스위치 활성화 시 동그란 버튼 내부 색상 변경 */
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* 토글 스위치 스타일 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* 토글 스위치 기본 스타일 */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 토글 스위치의 동그란 버튼 스타일 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px; /* 동그란 모양 */
+}
+
+/* 토글 스위치의 동그란 버튼 내부 스타일 (배경색) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%; /* 동그란 모양 */
+}
+
+/* 토글 스위치 활성화 시 동그란 버튼 색상 변경 */
+input:checked + .slider {
+    background-color: #2c3034;
+}
+
+/* 토글 스위치 활성화 시 동그란 버튼 내부 색상 변경 */
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* 토글 아이콘 스타일 */
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none; /* 기본적으로 숨김 */
+    color: #f1c40f; /* 아이콘 색상 */
+}
+
+/* 해 아이콘 스타일 */
+.sun {
+    left: 10px; /* 왼쪽에서부터의 거리 */
+}
+
+/* 달 아이콘 스타일 */
+.moon {
+    right: 10px; /* 오른쪽에서부터의 거리 */
+}
+
+/* 다크 모드 활성화시 달 아이콘 표시 */
+body.dark-mode .moon {
+    display: block; /* 다크 모드에서 달 아이콘 보임 */
+}
+
+/* 라이트 모드 활성화시 해 아이콘 표시 */
+body:not(.dark-mode) .sun {
+    display: block; /* 라이트 모드에서 해 아이콘 보임 */
+}
+
+/* 다크모드 로그인 시 텍스트 색상 설정 */
+body.dark-mode .navbar .btn-group-lg {
+    color: #FFF !important;
+}
+
+/* 다크 모드에서의 title과 detail-info 텍스트 색상 설정 */
+body.dark-mode .detail-header,
+body.dark-mode .detail-info dt,
+body.dark-mode .detail-info dd {
+    color: #FFF !important;
+}
+
+/* 다크 모드에서 리스트 그룹의 색상 설정 */
+body.dark-mode .list-group-item {
+    background-color: #424242;
+    color: #fff;
+    border-color: #373b3e;
+}
+
+/* 브랜드 이름 */
+.brand-name {
+    font-weight: bold; /* 굵은 폰트 */
+    color: black;
+    text-decoration: none;
+}

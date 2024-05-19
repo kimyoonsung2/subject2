@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layout/head :: head"></div>
+<link rel="stylesheet" th:href="@{/bootstrap/css/style.css}"/>
+<style>
+    .custom-header {
+        position: relative;
+        background-image: url('/bootstrap/image/index1.png');
+        min-height: 400px;
+        padding: 20px 40px;
+        border-radius: 30px;
+        margin-top: 40px; /* 원하는 상단 마진 값 */
+        margin-bottom: 0px; /* 원하는 하단 마진 값 */
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 1300px;
+        background-size: cover;
+        background-position: center;
+        transition: background-image 0.5s ease-in-out; /* 부드러운 이미지 변경 효과 */
+    }
+
+    .navigation {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 20px;
+        padding: 5px;
+    }
+
+    /* 버튼 모양 수정 */
+    .prev-button, .next-button {
+        background-color: white; /* 버튼 배경색 */
+        border: none; /* 테두리 제거 */
+        border-radius: 50%; /* 둥근 모양 */
+        padding: 10px; /* 버튼 안의 공간 */
+        width: 40px; /* 버튼 너비 */
+        height: 40px; /* 버튼 높이 */
+        cursor: pointer; /* 마우스 커서 모양 */
+        display: flex; /* 가운데 정렬 */
+        align-items: center; /* 수직 정렬 */
+        justify-content: center; /* 수평 정렬 */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+        transition: transform 0.3s; /* 애니메이션 효과 */
+    }
+
+    .prev-button:hover, .next-button:hover {
+        background-color: lightgray; /* 호버 상태일 때 배경색 */
+        transform: scale(1.1); /* 호버 시 확대 효과 */
+    }
+
+    /* 숫자 표시 부분 수정 */
+    .navigation span {
+        font-weight: bold; /* 폰트 굵기 */
+        font-size: 14px; /* 폰트 크기 */
+        color: black; /* 폰트 색상 */
+        margin: 0 10px; /* 좌우 여백 */
+    }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function like(boardNo) {
+        var loginStatus = document.getElementById('loginStatus').value;
+        var buttonId = 'likeButton' + boardNo;
+        var button = document.getElementById(buttonId);
+
+        if (loginStatus === 'not-logged-in') {
+            alert("로그인 이후 이용 가능합니다.");
+        } else {
+            $.ajax({
+                url: '/like/add/' + boardNo,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+            }).done(function(result) {
+                if (result === "added") {
+                    button.innerHTML = '😍'; // 찜 추가 시 하트 이모지로 변경
+                } else if (result === "removed") {
+                    button.innerHTML = '😃'; // 찜 해제 시 악수 이모지로 변경
+                }
+            }).fail(function(error){
+                alert(JSON.stringify(error));
+            });
+        }
+    }
+</script>
+<body>
+<div th:replace="layout/nav :: nav"></div>
+
+<div class="custom-header">
+    <div class="navigation">
+        <button class="prev-button">&lt;</button>
+        <span>1 | 4</span>
+        <button class="next-button">&gt;</button>
+    </div>
+</div>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5" style="margin-top: 0px">
+        <input type="hidden" id="loginStatus" th:value="${session.userName != null ? 'logged-in' : 'not-logged-in'}" />
+        <h3 style="text-align: left; font-weight: bold">인기글🔥</h3><br>
+
+        <!-- 상위 4개 인기글 표시 -->
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div th:each="list : ${topBoard}" class="col mb-5">
+                <div class="card h-100" style="position: relative; border-radius: 20px">
+                    <!-- 날짜 계산을 위한 준비 -->
+                    <div th:with="today=${T(java.time.LocalDate).now()},
+                      deadline=${T(java.time.LocalDate).parse(list.dueDate)},
+                      daysLeft=${T(java.time.temporal.ChronoUnit).DAYS.between(today, deadline)}"
+                         style="display: flex; align-items: center; margin-top: 15px; margin-right: 0px;">
+                        <!-- 조건에 따라 마감일 표시 -->
+                        <div th:if="${daysLeft} &lt;= 7 and ${daysLeft} &gt; 3"
+                             th:style="'border-radius: 15px; padding: 3px 8px; border: 2px solid #ff4500; margin-left: 20px; color: #ff4500; font-size: 13px; font-weight: bold'"
+                             th:text="'🚨마감 ' + ${daysLeft} + '일전'">
+                            <!-- 마감일이 7일 이하이지만 3일 초과일 때 -->
+                        </div>
+                        <div th:if="${daysLeft} &lt;= 3 and ${daysLeft} &gt; 0"
+                             th:style="'border-radius: 15px; padding: 3px 8px; border: 2px solid red; margin-left: 20px; color: red; font-size: 13px; font-weight: bold'"
+                             th:text="'🚨마감 임박!'">
+                            <!-- 마감일이 3일 이하일 때 -->
+                        </div>
+                        <div th:if="${daysLeft} == 0"
+                             th:style="'border-radius: 15px; padding: 3px 8px; border: 2px solid red; margin-left: 20px; color: red; font-size: 13px; font-weight: bold'"
+                             th:text="'🚨오늘 마감!'">
+                            <!-- 마감일이 오늘일 때 표시 -->
+                        </div>
+                        <!-- 기타 요소 -->
+                        <div style="margin-left: auto;">
+                            <a th:id="'likeButton' + ${list.boardNo}" th:onclick="|like(${list.boardNo})|"
+                               th:class="${#lists.contains(likedBoards, list.boardNo) ? 'liked' : ''}"
+                               style="text-decoration: none; color: inherit; margin-right: 10px; margin-top: 0px; font-size: 30px; cursor: pointer;">
+                                <span th:if="${#lists.contains(likedBoards, list.boardNo)}">😍</span>
+                                <span th:unless="${#lists.contains(likedBoards, list.boardNo)}">😃</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a style="text-decoration: none;" th:href="@{/board/detail/{id}(id=${list.boardNo})}">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- 마감일 표시 -->
+                                <div class="due-date" th:text="'마감일 | ' + ${list.dueDate}" style="text-align: left; white-space: pre-line; color:black; margin-bottom: 10px; font-size: 14px;">마감일</div>
+                                <!-- 게시글 제목 -->
+                                <h5 class="fw-bolder title-truncate title" th:text="${list.title}" style="text-align: left; color:black; font-weight: bold; font-size: 23px">제목</h5>
+                            </div>
+                        </div><br><br>
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%;">
+                            <hr style="border-top: 1px solid dimgrey; margin-bottom: 10px; margin-right: 20px; margin-left: 20px;">
+                            <div style="display: flex; align-items: center; justify-content: flex-end; color:black; margin-bottom: 15px; margin-top: 15px;">
+                                <div style="text-align: left; font-weight: bold; margin-right: auto;">
+                                    <span class="username" style="font-size: 1rem; margin-left: 20px;" th:text="'🙋🏻‍ '+${list.writer.userName}">작성자</span>
+                                </div>
+                                <span class="view-count" style="margin-right: 20px; font-weight: bold; font-size: 13px; " th:text="'👀 조회수 '+${list.viewCount}+ '회'">조회수</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="text-align: left; font-weight: bold">전체 게시글</h3>
+        <div class="select-container" style="position: relative; display: inline-block;">
+            <select class="form-control" id="studyType" name="studyType">
+                <option value="" disabled selected>진행 방식</option>
+                <option value="ALL">전체</option>
+                <option value="ON">온라인</option>
+                <option value="OFF">오프라인</option>
+                <option value="BOTH">온/오프라인</option>
+            </select>
+            <i class="bi bi-chevron-down"></i>
+        </div>&nbsp;
+
+        <div class="select-container" style="position: relative; display: inline-block;">
+            <select class="form-control" id="studySubject" name="studyType">
+                <option value="" disabled selected>스터디 과목</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </select>
+            <i class="bi bi-chevron-down"></i>
+        </div>
+
+        <input type="text" class="search-input" placeholder="🔍 검색어를 입력하세요">
+        <br><br>
+
+        <!-- 전체 게시글 -->
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div th:each="list, iterStat : ${allBoard}" class="col mb-5">
+                <div class="card h-100" style="position: relative; border-radius: 20px">
+                    <div style="display: flex; align-items: center; margin-top: 15px; margin-right: 0px;">
+                        <!-- 따끈따끈 최신글 -->
+                        <div th:if="${iterStat.count &lt;= 4}" style="border-radius: 15px; padding: 3px 8px; background-color: #fff3cd; margin-left: 10px; color: darkorange; font-size: 13px; font-weight: bold">
+                            🍞 따끈따끈 최신글
+                        </div>
+                        <!-- 인기글 -->
+                        <div th:if="${list.viewCount &gt; 799}" style="margin-left: 10px; margin-right: 10px; border-radius: 15px; padding: 3px 8px; background-color: #b6effb; color: blue; font-size: 13px; font-weight: bold;">
+                            💙 인기
+                        </div>
+                        <div style="margin-left: auto;">
+                            <a th:id="'likeButton' + ${list.boardNo}" th:onclick="|like(${list.boardNo})|"
+                               th:class="${#lists.contains(likedBoards, list.boardNo) ? 'liked' : ''}"
+                               style="text-decoration: none; color: inherit; margin-right: 10px; margin-top: 0px; font-size: 30px; cursor: pointer;">
+                                <span th:if="${#lists.contains(likedBoards, list.boardNo)}">😍</span>
+                                <span th:unless="${#lists.contains(likedBoards, list.boardNo)}">😃</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a style="text-decoration: none;" th:href="@{/board/detail/{id}(id=${list.boardNo})}">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <div th:text="'마감일 | ' + ${list.dueDate}" class="due-date" style="text-align: left; white-space: pre-line; color:black; margin-bottom: 10px; font-size: 14px; color: dimgrey;">마감일</div>
+                                <h5 class="fw-bolder title-truncate title" th:text="${list.title}" style="text-align: left; color:black; font-weight: bold; font-size: 23px">제목</h5>
+                            </div>
+                        </div><br><br>
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%;">
+                            <hr style="border-top: 1px solid dimgrey; margin-bottom: 10px; margin-right: 20px; margin-left: 20px;">
+                            <div style="display: flex; align-items: center; justify-content: flex-end; color:black; margin-bottom: 15px; margin-top: 15px;">
+                                <div style="text-align: left; font-weight: bold; margin-right: auto;">
+                                    <span class="username" style="font-size: 1rem; margin-left: 20px;" th:text="'🙋🏻‍ '+${list.writer.userName}">작성자</span>
+                                </div>
+                                <span class="view-count" style="margin-right: 20px; font-weight: bold; font-size: 13px; " th:text="'👀 조회수 '+${list.viewCount}+ '회'">조회수</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Learning_Mate 2024</p></div>
+</footer>
+</body>
+</html>

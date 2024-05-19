@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layout/head :: head"></div>
+<link rel="stylesheet" th:href="@{/bootstrap/css/style.css}"/>
+<body>
+<div th:replace="layout/nav :: nav"></div>
+<div class="container mt-5">
+    <h2 class="mb-4" style="font-weight: bold">어떤 스터디를 하실 건가요?</h2>
+    <form th:action="@{/board/write}"  th:object="${boardRequest}" method="post">
+        <div class="form-row">
+            <div class="mb-3">
+                <label for="postTitle1" class="form-label">제목</label>
+                <input type="text" class="form-control" id="postTitle1" placeholder="Enter title" th:field="*{title}">
+            </div>
+
+            <div class="mb-3">
+                <label for="studySubject" class="form-label">스터디 과목</label>
+                <input type="text" class="form-control" id="studySubject" placeholder="Enter subject"  th:field="*{studySubject}">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="mb-3">
+                <label for="totalPeople" class="form-label">모집 인원</label>
+                <input type="number" class="form-control" id="totalPeople" placeholder="Enter number" th:field="*{totalPeople}" min="1">
+            </div>
+
+            <div class="mb-3">
+                <label for="studyType" class="form-label">진행 방식</label>
+                <select class="form-control" id="studyType" th:field="*{studyType}">
+                    <option value="ON">온라인</option>
+                    <option value="OFF">오프라인</option>
+                    <option value="BOTH">온/오프라인</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="mb-3">
+                <label for="dueDate" class="form-label">모집 마감일</label>
+                <input type="date" class="form-control" id="dueDate" th:field="*{dueDate}" th:min="${T(java.time.LocalDate).now().toString()}">
+            </div>
+
+            <div class="mb-3">
+                <label for="contactLink" class="form-label">오픈채팅 링크</label>
+                <input type="text" class="form-control" id="contactLink" placeholder="Enter link" th:field="*{contactLink}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="postContent" class="form-label">스터디에 대해 소개해주세요!</label>
+            <textarea class="form-control" id="postContent" rows="6" placeholder="Enter your content" th:field="*{content}"></textarea>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-outline-dark" style="border-radius: 30px" onclick="return validateForm()">작성</button>
+        </div><br><br>
+    </form>
+
+</div>
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Learning_Mate 2024</p></div>
+</footer>
+<link href="/bootstrap/js/scripts.js" rel="stylesheet" />
+</body>
+</html>

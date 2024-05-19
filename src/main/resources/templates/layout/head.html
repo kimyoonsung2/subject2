@@ -1,0 +1,231 @@
+<head>
+    <title>Learning_Mate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="/bootstrap/css/style.css" rel="stylesheet" />
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/bootstrap/assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/bootstrap/css/styles.css" rel="stylesheet" />
+    <!-- Font Awesome CDN 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <!-- 글꼴 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@100..900&family=Noto+Serif+KR&display=swap" rel="stylesheet">
+    <style>
+        /* body에 구글 폰트 적용 */
+        body {
+            font-family: 'Gowun Dodum'!important;
+        }
+        img {
+            max-width: 85px;
+            max-height: 85px;
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        function isSessionExist(redirectUrl) {
+            var loginStatus = document.getElementById('loginStatus').value;
+
+            if (loginStatus === 'not-logged-in') {
+                alert("로그인 이후 이용 가능합니다.");
+            } else {
+                window.location.href = redirectUrl;
+            }
+        }
+
+        function isSessionExistFormAction(actionFunction) {
+            var loginStatus = document.getElementById('loginStatus').value;
+
+            if (loginStatus === 'not-logged-in') {
+                alert("로그인 이후 이용 가능합니다.");
+            } else if (typeof actionFunction === 'function') {
+                actionFunction(); // 세션이 있을 경우 지정된 함수 실행
+            }
+        }
+    </script>
+
+    <script>
+        function submitCommentForm() {
+            document.getElementById("commentForm").submit();
+        }
+    </script>
+
+    <script>
+        // 특정 글자 수마다 줄바꿈 추가 함수
+        function addLineBreaks(selector, maxChars) {
+            const element = document.querySelector(selector);
+            if (element) {
+                let text = element.innerText;
+                let newText = '';
+                for (let i = 0; i < text.length; i += maxChars) {
+                    newText += text.substring(i, i + maxChars) + '\n';
+                }
+                element.innerText = newText;
+            }
+        }
+
+        // 페이지 로드 시 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            addLineBreaks('#contentBox', 149); // 10글자 마다 줄바꿈 추가
+        });
+    </script>
+
+    <script>
+        function validateForm() {
+            // 입력 필드와 관련된 메시지를 객체로 정의
+            const fields = [
+                { id: 'postTitle1', message: '제목을 입력하세요.' },
+                { id: 'studySubject', message: '스터디 과목을 입력하세요.' },
+                { id: 'totalPeople', message: '모집 인원을 입력하세요.' },
+                { id: 'studyType', message: '진행 방식을 선택하세요.' },
+                { id: 'dueDate', message: '모집 마감일을 입력하세요.' },
+                { id: 'contactLink', message: '오픈채팅 링크를 입력하세요.' },
+                { id: 'postContent', message: '스터디에 대해 소개해주세요.' }
+            ];
+
+            // 각 필드를 순회하며 입력값 검사
+            for (let field of fields) {
+                const inputElement = document.getElementById(field.id);
+                if (!inputElement.value.trim()) { // 값이 비어 있거나 공백만 있는 경우
+                    alert(field.message); // 경고창 표시
+                    inputElement.focus(); // 해당 필드에 포커스
+                    return false; // 폼 제출 중지
+                }
+            }
+            // 모집 인원이 1명 이상인지 검사
+            const totalPeopleElement = document.getElementById('totalPeople');
+            if (parseInt(totalPeopleElement.value, 10) < 1) {
+                alert('모집 인원은 1명 이상이어야 합니다.');
+                totalPeopleElement.focus();
+                return false;
+            }
+
+            return true; // 모든 검사를 통과했으므로 폼 제출 계속
+        }
+    </script>
+
+    <!-- 다크모드 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var checkbox = document.getElementById('darkModeToggle');
+            checkbox.addEventListener('change', function() {
+                if(this.checked) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 모든 .title-truncate 요소를 선택
+            var titles = document.querySelectorAll('.title-truncate');
+
+            // 각 요소에 대해 실행
+            titles.forEach(function(title) {
+                var text = title.innerText;
+
+                // 텍스트가 22자를 초과하면, 22자에서 잘라내고 "..." 추가
+                if (text.length > 22) {
+                    title.innerText = text.substring(0, 22) + '...';
+                }
+            });
+        });
+    </script>
+
+    <!-- 다크모드 유지 -->
+    <script>
+        // 사용자가 모드를 변경할 때 호출되는 함수
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.toggle('dark-mode');
+            // 다크 모드 설정을 쿠키에 저장
+            document.cookie = "darkMode=" + isDarkMode + "; path=/";
+        }
+
+        // 페이지가 로드될 때 호출되는 함수
+        function loadDarkMode() {
+            const darkMode = document.cookie.replace(/(?:(?:^|.*;\s*)darkMode\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            const body = document.body;
+            if (darkMode === 'true') {
+                body.classList.add('dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+            }
+        }
+
+        // 페이지가 로드될 때 저장된 모드로 설정
+        document.addEventListener('DOMContentLoaded', loadDarkMode);
+    </script>
+    <script>
+        const images = [
+            '/bootstrap/image/index1.png',
+            '/bootstrap/image/index2.png',
+            '/bootstrap/image/index3.png',
+            '/bootstrap/image/index4.png',
+        ];
+        const imageLinks = {
+            '/bootstrap/image/index1.png': 'https://salty-cloak-a49.notion.site/Leaning_Mate-34032cf815ae4256a093c6021dd92b30?pvs=4',
+        };
+        let currentImage = 0;
+
+        function updateBackgroundImage() {
+            const header = document.querySelector('.custom-header');
+            const currentImagePath = images[currentImage];
+            header.style.backgroundImage = `url('${currentImagePath}')`;
+
+            // 이미지에 링크 설정
+            if (imageLinks[currentImagePath]) {
+                header.style.cursor = 'pointer';
+                header.onclick = function() {
+                    window.location.href = imageLinks[currentImagePath];
+                };
+            } else {
+                header.style.cursor = 'default';
+                header.onclick = null;
+            }
+
+            const navigation = document.querySelector('.navigation span');
+            if (navigation) {
+                navigation.textContent = `${currentImage + 1} | ${images.length}`;
+            }
+        }
+
+        function showNextImage(event) {
+            if (event) event.stopPropagation(); // 이벤트 전파 차단
+            currentImage = (currentImage + 1) % images.length;
+            updateBackgroundImage();
+        }
+
+        function showPrevImage(event) {
+            if (event) event.stopPropagation(); // 이벤트 전파 차단
+            currentImage = (currentImage - 1 + images.length) % images.length;
+            updateBackgroundImage();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBackgroundImage();
+
+            const nextButton = document.querySelector('.next-button');
+            const prevButton = document.querySelector('.prev-button');
+
+            if (nextButton) {
+                nextButton.addEventListener('click', showNextImage);
+            }
+
+            if (prevButton) {
+                prevButton.addEventListener('click', showPrevImage);
+            }
+
+            setInterval(showNextImage, 4000); // 4초마다 자동으로 이미지 변경
+        });
+    </script>
+</head>
+
